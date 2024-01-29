@@ -15,49 +15,51 @@ fun Application.configureDatabases() {
     val database = Database.connect(jdbcURL, driverClassName, user = "jwd1a0c1c28d1qsg", password = "qrceod6may1jl7he")
     val carService = CarService(database)
     routing {
-        // Create user
-        post("/cars") {
-            val user = call.receive<Car>()
-            val id = carService.create(user)
-            call.respond(HttpStatusCode.Created, id)
-        }
-        // Read user
-        get("/cars/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = carService.read(id)
-            if (user != null) {
-                call.respond(HttpStatusCode.OK, user)
-            } else {
-                call.respond(HttpStatusCode.NotFound)
+        route("/api"){
+            // Create user
+            post("/cars") {
+                val user = call.receive<Car>()
+                val id = carService.create(user)
+                call.respond(HttpStatusCode.Created, id)
             }
-        }
-        // Update user
-        put("/cars/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = call.receive<Car>()
-            val status = carService.update(id, user)
-            if (status){
-                call.respond(HttpStatusCode.OK)
-            }else{
-                call.respond(ExpectationFailed)
+            // Read user
+            get("/cars/{id}") {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+                val user = carService.read(id)
+                if (user != null) {
+                    call.respond(HttpStatusCode.OK, user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound)
+                }
             }
-        }
+            // Update user
+            put("/cars/{id}") {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+                val user = call.receive<Car>()
+                val status = carService.update(id, user)
+                if (status){
+                    call.respond(HttpStatusCode.OK)
+                }else{
+                    call.respond(ExpectationFailed)
+                }
+            }
 
-        post("/cars/update_current_status/{id}&{currentStatus}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val currentStatus = call.parameters["currentStatus"]?.toBoolean() ?: throw IllegalArgumentException("Invalid currentStatus")
-            val status = carService.update(id, Car(currentStatus = currentStatus))
-            if (status){
-                call.respond(HttpStatusCode.OK)
-            }else{
-                call.respond(HttpStatusCode.BadRequest)
+            post("/cars/update_current_status/{id}&{currentStatus}") {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+                val currentStatus = call.parameters["currentStatus"]?.toBoolean() ?: throw IllegalArgumentException("Invalid currentStatus")
+                val status = carService.update(id, Car(currentStatus = currentStatus))
+                if (status){
+                    call.respond(HttpStatusCode.OK)
+                }else{
+                    call.respond(HttpStatusCode.BadRequest)
+                }
             }
-        }
-        // Delete user
-        delete("/cars/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            carService.delete(id)
-            call.respond(HttpStatusCode.OK)
+            // Delete user
+            delete("/cars/{id}") {
+                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
+                carService.delete(id)
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 }
