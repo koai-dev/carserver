@@ -10,12 +10,9 @@ import org.h2.engine.User
 import org.jetbrains.exposed.sql.*
 
 fun Application.configureDatabases() {
-    val database = Database.connect(
-        url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1",
-        user = "root",
-        driver = "org.h2.Driver",
-        password = ""
-    )
+    val driverClassName = "com.mysql.cj.jdbc.Driver"
+    val jdbcURL = "mysql://jwd1a0c1c28d1qsg:qrceod6may1jl7he@cwe1u6tjijexv3r6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xrsqp5d5dxrlhcwz"
+    val database = Database.connect(jdbcURL, driverClassName, user = "jwd1a0c1c28d1qsg", password = "qrceod6may1jl7he")
     val carService = CarService(database)
     routing {
         // Create user

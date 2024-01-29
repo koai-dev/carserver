@@ -25,8 +25,8 @@ repositories {
     maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers") }
 }
 
-tasks.register("stage")  {
-    dependsOn("installDist")
+tasks {
+    create("stage").dependsOn("installDist")
 }
 
 dependencies {
@@ -51,4 +51,5 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("mysql:mysql-connector-java:8.0.33")
 }
