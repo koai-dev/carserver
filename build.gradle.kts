@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.vnpabk"
-version = "0.0.1"
+version = "0.0.2"
 
 application {
     mainClass.set("com.vnpabk.ApplicationKt")
