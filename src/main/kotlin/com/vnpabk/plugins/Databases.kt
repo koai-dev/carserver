@@ -11,16 +11,21 @@ import org.jetbrains.exposed.sql.*
 
 fun Application.configureDatabases() {
     val driverClassName = "com.mysql.cj.jdbc.Driver"
-    val jdbcURL = "jdbc:mysql://jwd1a0c1c28d1qsg:qrceod6may1jl7he@cwe1u6tjijexv3r6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xrsqp5d5dxrlhcwz"
+    val jdbcURL =
+        "jdbc:mysql://jwd1a0c1c28d1qsg:qrceod6may1jl7he@cwe1u6tjijexv3r6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/xrsqp5d5dxrlhcwz"
     val database = Database.connect(jdbcURL, driverClassName, user = "jwd1a0c1c28d1qsg", password = "qrceod6may1jl7he")
     val carService = CarService(database)
     routing {
-        route("/api"){
+        route("/api") {
             // Create user
             post("/cars") {
                 val user = call.receive<Car>()
                 val id = carService.create(user)
                 call.respond(HttpStatusCode.Created, id)
+            }
+            get("/cars/all") {
+                val list = carService.all()
+                call.respond(HttpStatusCode.OK, list)
             }
             // Read user
             get("/cars/{id}") {
@@ -37,20 +42,21 @@ fun Application.configureDatabases() {
                 val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
                 val user = call.receive<Car>()
                 val status = carService.update(id, user)
-                if (status){
+                if (status) {
                     call.respond(HttpStatusCode.OK)
-                }else{
+                } else {
                     call.respond(ExpectationFailed)
                 }
             }
 
             post("/cars/update_current_status/{id}&{currentStatus}") {
                 val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-                val currentStatus = call.parameters["currentStatus"]?.toBoolean() ?: throw IllegalArgumentException("Invalid currentStatus")
+                val currentStatus = call.parameters["currentStatus"]?.toBoolean()
+                    ?: throw IllegalArgumentException("Invalid currentStatus")
                 val status = carService.update(id, Car(currentStatus = currentStatus))
-                if (status){
+                if (status) {
                     call.respond(HttpStatusCode.OK)
-                }else{
+                } else {
                     call.respond(HttpStatusCode.BadRequest)
                 }
             }

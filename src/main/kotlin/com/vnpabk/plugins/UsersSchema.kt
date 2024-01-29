@@ -76,6 +76,20 @@ class CarService(private val database: Database) {
         }
     }
 
+    suspend fun all(): List<Car>{
+        return dbQuery { Cars.selectAll().map { Car(
+            it[Cars.id],
+            it[Cars.no],
+            it[Cars.name],
+            it[Cars.vehicleCategory],
+            it[Cars.driverName],
+            it[Cars.numberPlate],
+            it[Cars.currentStatus],
+            it[Cars.usageStatus],
+            it[Cars.usageYear]
+        ) } }
+    }
+
     suspend fun update(id: Int, car: Car): Boolean {
         return dbQuery {
             Cars.update({ Cars.id eq id }) { upCar ->
