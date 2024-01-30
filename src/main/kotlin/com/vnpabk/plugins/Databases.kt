@@ -18,7 +18,7 @@ fun Application.configureDatabases() {
     routing {
         route("/api") {
             // Create user
-            post("/cars") {
+            post("/cars/add") {
                 val user = call.receive<Car>()
                 val id = carService.create(user)
                 call.respond(HttpStatusCode.Created, id)
