@@ -29,7 +29,7 @@ class CarService(private val database: Database) {
         val driverName = varchar("driverName", length = 50).nullable()
         val numberPlate = varchar("numberPlate", length = 20).nullable()
         val currentStatus = bool("currentStatus").default(false).nullable()
-        val usageStatus = varchar("usageStatus", length = 300).default("Thông số kỹ thuật tốt").nullable()
+        val usageStatus = text("usageStatus").default("Thông số kỹ thuật tốt").nullable()
         val usageYear = varchar("usageYear", length = 25).default("2024").nullable()
         override val primaryKey = PrimaryKey(id)
     }
