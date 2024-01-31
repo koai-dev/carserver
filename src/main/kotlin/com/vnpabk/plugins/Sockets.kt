@@ -1,10 +1,13 @@
 package com.vnpabk.plugins
 
+import io.ktor.network.sockets.*
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import java.time.Duration
+import java.util.*
+import kotlin.collections.LinkedHashSet
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -14,11 +17,11 @@ fun Application.configureSockets() {
         masking = false
     }
     routing {
-        webSocket("/carChannel") { // websocketSession
+        webSocket("/carChannel") {
             for (frame in incoming) {
                 if (frame is Frame.Text) {
                     val text = frame.readText()
-                    outgoing.send(Frame.Text(text))
+                    send(text)
                 }
             }
         }
