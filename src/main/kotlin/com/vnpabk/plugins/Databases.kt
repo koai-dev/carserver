@@ -21,7 +21,7 @@ fun Application.configureDatabases() {
             post("/cars/add") {
                 val user = call.receive<Car>()
                 val id = carService.create(user)
-                call.respond(HttpStatusCode.Created, id)
+                call.respond(HttpStatusCode.OK, id)
             }
             get("/cars/all") {
                 val list = carService.all()
