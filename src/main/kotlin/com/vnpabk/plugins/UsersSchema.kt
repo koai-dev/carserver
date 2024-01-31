@@ -85,7 +85,7 @@ class CarService(private val database: Database) {
             it[Cars.driverName],
             it[Cars.numberPlate],
             it[Cars.currentStatus],
-            it[Cars.usageStatus],
+            it[Cars.usageStatus].toString(),
             it[Cars.usageYear]
         ) } }
     }
