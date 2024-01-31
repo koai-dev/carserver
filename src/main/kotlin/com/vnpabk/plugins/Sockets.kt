@@ -7,7 +7,6 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import java.time.Duration
 import java.util.*
-import kotlin.collections.LinkedHashSet
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -19,10 +18,12 @@ fun Application.configureSockets() {
     routing {
         webSocket("/carChannel") {
             println("WEBSOCKET connected!")
+            application.log.debug("WEBSOCKET CONNECTED!")
             for (frame in incoming) {
                 if (frame is Frame.Text) {
                     val text = frame.readText()
                     print("WEBSOCKET COMMING: $text")
+                    application.log.debug("WEBSOCKET COMMING: $text")
                     send(text)
                 }
             }
