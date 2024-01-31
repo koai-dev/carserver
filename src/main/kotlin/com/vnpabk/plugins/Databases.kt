@@ -56,7 +56,7 @@ fun Application.configureDatabases() {
                     ?: throw IllegalArgumentException("Invalid currentStatus")
                 val status = carService.update(id, Car(currentStatus = currentStatus))
                 if (status) {
-                    call.respond(HttpStatusCode.OK, "Thành công")
+                    call.respond(HttpStatusCode.OK, id)
                 } else {
                     call.respond(HttpStatusCode.BadRequest)
                 }
@@ -65,7 +65,7 @@ fun Application.configureDatabases() {
             delete("/cars/{id}") {
                 val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
                 carService.delete(id)
-                call.respond(HttpStatusCode.OK, "Thành công")
+                call.respond(HttpStatusCode.OK, id)
             }
         }
     }
