@@ -18,6 +18,7 @@ fun Application.configureSockets() {
     }
     routing {
         webSocket("/carChannel") {
+            println("Client onConnect")
             for (frame in incoming) {
                 if (frame is Frame.Text) {
                     val text = frame.readText()
