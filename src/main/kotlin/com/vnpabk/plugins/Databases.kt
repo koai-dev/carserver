@@ -49,9 +49,10 @@ fun Application.configureDatabases() {
                 }
             }
 
-            post("/cars/update_current_status?{id}&{currentStatus}") {
-                val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-                val currentStatus = call.parameters["currentStatus"]?.toBoolean()
+            post("/cars/update_current_status") {
+                val car = call.receive<Car>()
+                val id = car.id ?: throw IllegalArgumentException("Invalid currentStatus")
+                val currentStatus = car.currentStatus
                     ?: throw IllegalArgumentException("Invalid currentStatus")
                 val status = carService.update(id, Car(currentStatus = currentStatus))
                 if (status) {
