@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.*
 
 @Serializable
 data class Car(
-    val id: Int = 0,
+    val id: Int? = null,
     val no: Int? = null,
     val name: String? = null,
     val vehicleCategory: String? = null,
