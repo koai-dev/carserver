@@ -18,12 +18,9 @@ fun Application.configureSockets() {
     routing {
         webSocket("/carChannel") {
             println("WEBSOCKET connected!")
-            for (frame in incoming) {
-                if (frame is Frame.Text) {
-                    val text = frame.readText()
-                    println("WEBSOCKET COMMING: $text")
-                    send(text)
-                }
+            for (text in incoming) {
+                println("WEBSOCKET COMMING: $text")
+                send(text)
             }
         }
     }
