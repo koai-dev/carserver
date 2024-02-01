@@ -43,7 +43,7 @@ fun Application.configureDatabases() {
                 val user = call.receive<Car>()
                 val status = carService.update(id, user)
                 if (status) {
-                    call.respond(HttpStatusCode.OK, "Thành công")
+                    call.respond(HttpStatusCode.OK, id)
                 } else {
                     call.respond(ExpectationFailed)
                 }
