@@ -7,6 +7,7 @@ import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -16,15 +17,33 @@ fun Application.configureSockets() {
         masking = false
     }
     routing {
+        val connections = Collections.synchronizedSet<Connection?>(LinkedHashSet())
         webSocket("/carChannel") {
             println("WEBSOCKET connected!")
-            for (frame in incoming) {
-                if (frame is Frame.Text) {
-                    val text = frame.readText()
-                    println("WEBSOCKET COMMING: $text")
-                    send(text)
+            val thisConnection = Connection(this)
+            connections += thisConnection
+            try {
+                for (frame in incoming) {
+                    frame as? Frame.Text ?: continue
+                    val receivedText = frame.readText()
+                    connections.filter { connection -> connection.name != thisConnection.name }.forEach {
+                        it.session.send(receivedText)
+                    }
                 }
+            } catch (e: Exception) {
+                println(e.localizedMessage)
+            } finally {
+                println("Removing $thisConnection!")
+                connections -= thisConnection
             }
         }
     }
+}
+
+class Connection(val session: DefaultWebSocketSession) {
+    companion object {
+        val lastId = AtomicInteger(0)
+    }
+
+    val name = "user${lastId.getAndIncrement()}"
 }
