@@ -1,5 +1,7 @@
 package com.vnpabk.plugins
 
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
@@ -7,6 +9,7 @@ import io.ktor.websocket.*
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+
 
 fun Application.configureSockets() {
     install(WebSockets) {
@@ -27,6 +30,11 @@ fun Application.configureSockets() {
                     val receivedText = frame.readText()
                     connections.filter { connection -> connection.name != thisConnection.name }.forEach {
                         it.session.send(receivedText)
+                        val message: Message = Message.builder()
+                            .putData("data", receivedText)
+                            .build()
+                        val response = FirebaseMessaging.getInstance().send(message)
+                        println("Successfully sent message: $response")
                     }
                 }
             } catch (e: Exception) {

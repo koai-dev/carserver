@@ -52,4 +52,5 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     implementation("mysql:mysql-connector-java:8.0.33")
+    implementation("com.google.firebase:firebase-admin:9.2.0")
 }
